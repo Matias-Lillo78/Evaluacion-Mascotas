@@ -20,6 +20,19 @@ function MascotaPage() {
         }
     }
 
+    const addMascota = async (mascota) => {
+        try {
+            const response = await api.post('mascota/', mascota);
+            if (response.status === 201){
+                alert('Mascota agregada')
+            }else{
+                alert('Se produjo un error')
+            }
+        } catch (error) {
+            console.error(error.response)
+        }
+    }
+
     useEffect(()=>{
         fetchMascotas();
     }, [])
