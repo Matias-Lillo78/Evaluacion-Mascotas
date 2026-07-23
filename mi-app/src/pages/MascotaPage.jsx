@@ -40,7 +40,7 @@ function MascotaPage() {
     return (
         <article>
             <h1>Lista Mascotas</h1>
-            <MascotaForm />
+            <MascotaForm onAdd={addMascota}/>
             <MascotaList lista={mascotaList} />
         </article>
     )

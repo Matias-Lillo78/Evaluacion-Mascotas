@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function MascotaForm(){
+function MascotaForm(onAdd){
     const [nombre, setnombre] = useState("");
     const [descripcion, setdescripcion] = useState("");
     const [Imagen, setImagen] = useState("");
@@ -53,8 +53,29 @@ function MascotaForm(){
             return
         }
 
-        
 
+        const mascota = {
+            nombre = nombre,
+            descripcion = descripcion,
+            imagen = Imagen,
+            estado = Estado,
+            tipo_animal = TipoDeAnimal,
+            edad = Edad,
+            raza = Raza,
+            sexo = Sexo,
+            tamaño =Tamaño
+        }
+
+        onAdd(mascota)
+        setnombre("")
+        setdescripcion("")
+        setImagen("")
+        setEstado("")
+        setTipoDeAnimal("")
+        setEdad("")
+        setRaza("")
+        setSexo("")
+        setTamaño("")
 
     }
 
