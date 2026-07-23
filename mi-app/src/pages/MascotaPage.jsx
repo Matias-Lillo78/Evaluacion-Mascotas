@@ -1,3 +1,4 @@
+import MascotaForm from "../components/MascotaForm";
 import MascotaList from "../components/MascotaList";
 import api from "../services/api";
 import { useEffect, useState } from "react";
@@ -26,7 +27,7 @@ function MascotaPage() {
     return (
         <article>
             <h1>Lista Mascotas</h1>
-
+            <MascotaForm />
             <MascotaList lista={mascotaList} />
         </article>
     )

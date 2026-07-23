@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 function MascotaForm(){
     const [nombre, setnombre] = useState("");
     const [descripcion, setdescripcion] = useState("");
@@ -8,14 +10,52 @@ function MascotaForm(){
     const [Raza, setRaza] = useState("");
     const [Sexo, setSexo] = useState("");
     const [Tamaño, setTamaño] = useState("");
-
+    const [errores, setErrores] = useState("")
 
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log("hice click")
 
+        if(nombre.trim() === ""){
+            setErrores("Nombres no puede estar vacio")
+            return
+        }
+        if(descripcion.trim() === ""){
+            setErrores("Descripcion no puede estar vacio")
+            return
+        }
+        if(Imagen.trim() === ""){
+            setErrores("Imagen no puede estar vacio")
+            return
+        }
+        if(Estado.trim() === ""){
+            setErrores("Estado no puede estar vacio")
+            return
+        }
+        if(TipoDeAnimal.trim() === ""){
+            setErrores("Tipo de animal no puede estar vacio")
+            return
+        }
+        if(Edad.trim() === ""){
+            setErrores("Edad no puede estar vacio")
+            return
+        }
+        if(Raza.trim() === ""){
+            setErrores("Raza no puede estar vacio")
+            return
+        }
+        if(Sexo.trim() === ""){
+            setErrores("Sexo no puede estar vacio")
+            return
+        }
+        if(Tamaño.trim() === ""){
+            setErrores("Tamaño no puede estar vacio")
+            return
+        }
 
         
+
+
     }
 
     return(
@@ -32,7 +72,7 @@ function MascotaForm(){
                 <label>Sexo<input type="text"onChange={e=> setSexo(e.target.value)}/></label>
                 <label>Tamaño<input type="text"onChange={e=> setTamaño(e.target.value)}/></label>
                 <button>Agregar</button>
-                <p></p>
+                <p>{errores}</p>
 
             </form>
         
