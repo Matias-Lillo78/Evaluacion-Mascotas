@@ -55,15 +55,15 @@ function MascotaForm(onAdd){
 
 
         const mascota = {
-            nombre = nombre,
-            descripcion = descripcion,
-            imagen = Imagen,
-            estado = Estado,
-            tipo_animal = TipoDeAnimal,
-            edad = Edad,
-            raza = Raza,
-            sexo = Sexo,
-            tamaño =Tamaño
+            nombre : nombre,
+            descripcion : descripcion,
+            imagen : Imagen,
+            estado : Estado,
+            tipo_animal : TipoDeAnimal,
+            edad : Edad,
+            raza : Raza,
+            sexo : Sexo,
+            tamano : Tamaño
         }
 
         onAdd(mascota)
@@ -103,3 +103,4 @@ function MascotaForm(onAdd){
 }
 
 export default MascotaForm;
+//40
