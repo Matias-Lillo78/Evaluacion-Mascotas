@@ -1,6 +1,9 @@
 import { useState } from "react";
+import api from "../services/api";
 
-function MascotaForm(onAdd){
+function MascotaForm({ onAdd, choices, TipoAnimal, sexo,Tamano}) {
+
+   
     const [nombre, setnombre] = useState("");
     const [descripcion, setdescripcion] = useState("");
     const [Imagen, setImagen] = useState("");
@@ -11,6 +14,8 @@ function MascotaForm(onAdd){
     const [Sexo, setSexo] = useState("");
     const [Tamaño, setTamaño] = useState("");
     const [errores, setErrores] = useState("")
+
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -70,7 +75,6 @@ function MascotaForm(onAdd){
         setnombre("")
         setdescripcion("")
         setImagen("")
-        setEstado("")
         setTipoDeAnimal("")
         setEdad("")
         setRaza("")
@@ -83,16 +87,44 @@ function MascotaForm(onAdd){
         <>
                 <h3>Formulario Mascotas</h3>
             <form onSubmit={e => handleSubmit(e)}>
-                <label>Nombre<input type="text" onChange={e=> setnombre(e.target.value)}/></label>
-                <label>Descripcion<input type="text"onChange={e=> setdescripcion(e.target.value)}/></label>
-                <label>Imagen<input type="text"onChange={e=> setImagen(e.target.value)}/></label>
-                <label>Estado<input type="text"onChange={e=> setEstado(e.target.value)}/></label>
-                <label>TipodeAnimal<input type="text"onChange={e=> setTipoDeAnimal(e.target.value)}/></label>
-                <label>Edad<input type="text"onChange={e=> setEdad(e.target.value)}/></label>
-                <label>Raza<input type="text"onChange={e=> setRaza(e.target.value)}/></label>
-                <label>Sexo<input type="text"onChange={e=> setSexo(e.target.value)}/></label>
-                <label>Tamaño<input type="text"onChange={e=> setTamaño(e.target.value)}/></label>
-                <button>Agregar</button>
+                <label>Nombre: <input type="text" onChange={e=> setnombre(e.target.value)}/></label>
+                <label>Descripcion: <input type="text"onChange={e=> setdescripcion(e.target.value)}/></label>
+                <label>Imagen: <input type="text"onChange={e=> setImagen(e.target.value)}/></label>
+                <label>Estado: 
+                    <select>
+                        <option value={""} disabled>Sin estado</option>
+                        {
+                            choices.map(e => <option key={e.value}>{e.label}</option>)
+                        }
+                    </select>
+                </label>
+                <label>Tipo_Animal: 
+                    <select>
+                        <option value={""} disabled>...</option>
+                        {
+                            TipoAnimal.map(e => <option key={e.value}>{e.label}</option>)
+                        }
+                    </select>
+                </label>
+                  <label>Sexo: 
+                    <select>
+                        <option value={""} disabled>...</option>
+                        {
+                            sexo.map(e => <option key={e.value}>{e.label}</option>)
+                        }
+                    </select>
+                </label>
+                 <label>Tamaño: 
+                    <select>
+                        <option value={""} disabled>...</option>
+                        {
+                            Tamano.map(e => <option key={e.value}>{e.label}</option>)
+                        }
+                    </select>
+                </label>
+                <label>Edad: <input type="text"onChange={e=> setEdad(e.target.value)}/></label>
+                <label>Raza: <input type="text"onChange={e=> setRaza(e.target.value)}/></label>
+                <button>Agregar: </button>
                 <p>{errores}</p>
 
             </form>
