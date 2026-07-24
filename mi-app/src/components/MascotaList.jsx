@@ -1,4 +1,15 @@
 function MascotaList({lista}) {
+    const [nombre, setnombre] = useState("");
+    const [descripcion, setdescripcion] = useState("");
+    const [Imagen, setImagen] = useState("");
+    const [Estado, setEstado] = useState("");
+    const [TipoDeAnimal, setTipoDeAnimal] = useState("");
+    const [Edad, setEdad] = useState("");
+    const [Raza, setRaza] = useState("");
+    const [Sexo, setSexo] = useState("");
+    const [Tamaño, setTamaño] = useState("");
+
+
     return (
         <>
             <h3>Lista Mascotas</h3>
