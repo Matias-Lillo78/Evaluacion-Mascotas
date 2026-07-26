@@ -26,7 +26,7 @@ function MascotaPage() {
     } catch (error) {
       console.error(response.error)
     }
-
+    
   }
 
   const addMascota = async (mascota) => {
