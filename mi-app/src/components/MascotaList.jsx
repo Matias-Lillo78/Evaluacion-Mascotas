@@ -1,9 +1,12 @@
-function MascotaList({lista}) {
+import MascotaForm from "./MascotaForm";
+
+function MascotaList({lista, onAdd}) {
 
 
     return (
         <>
             <h3>Lista Mascotas</h3>
+            <MascotaForm onAdd={onAdd} />
             <table>
                 <thead>
                     <tr>
