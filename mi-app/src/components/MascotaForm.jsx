@@ -1,25 +1,46 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../services/api";
 
-function MascotaForm({ onAdd, choices, TipoAnimal, sexo,Tamano}) {
+function MascotaForm({ onAdd, choices, TipoAnimal, sexo, Tamano}) {
+    const [Estado, setEstado] = useState([]);
+    const [TipoDeAnimal, setTipoDeAnimal] = useState([]);
+    const [Sexo, setSexo] = useState([]);
+    const [Tamaño, setTamaño] = useState([]);
 
-   
-    const [nombre, setnombre] = useState("");
-    const [descripcion, setdescripcion] = useState("");
-    const [Imagen, setImagen] = useState("");
-    const [Estado, setEstado] = useState("");
-    const [TipoDeAnimal, setTipoDeAnimal] = useState("");
+    const [nombre, setNombre] = useState("");
+    const [descripcion, setDescripcion] = useState("");
     const [Edad, setEdad] = useState("");
     const [Raza, setRaza] = useState("");
-    const [Sexo, setSexo] = useState("");
-    const [Tamaño, setTamaño] = useState("");
+    const [selectedEstado, setSelectedEstado] = useState("");
+    const [selectedTipoDeAnimal, setSelectedTipoDeAnimal] = useState("");
+    const [selectedSexo, setSelectedSexo] = useState("");
+    const [selectedTamaño, setSelectedTamaño] = useState("");
+    const [Imagen, setImagen] = useState(null);
+
     const [errores, setErrores] = useState("")
 
+    const fetchChoices = async () => {
+        try{
+            const response = await api.get("choices/");
+            console.log(response.data.estado);
+            setEstado(response.data.estado);
+            setTipoDeAnimal(response.data.tipo_animal)
+            setSexo(response.data.sexo)
+            setTamaño(response.data.tamano)
+        }catch(error){
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        fetchChoices();
+    }, [])
 
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("hice click")
+        //console.log(nombre, descripcion, Edad, Raza, selectedEstado, selectedTipoDeAnimal, selectedSexo, selectedTamaño, Imagen)
+        
 
         if(nombre.trim() === ""){
             setErrores("Nombres no puede estar vacio")
@@ -29,19 +50,19 @@ function MascotaForm({ onAdd, choices, TipoAnimal, sexo,Tamano}) {
             setErrores("Descripcion no puede estar vacio")
             return
         }
-        if(Imagen.trim() === ""){
+        if(!Imagen){
             setErrores("Imagen no puede estar vacio")
             return
         }
-        if(Estado.trim() === ""){
+        if(selectedEstado === ""){
             setErrores("Estado no puede estar vacio")
             return
         }
-        if(TipoDeAnimal.trim() === ""){
+        if(selectedTipoDeAnimal === ""){
             setErrores("Tipo de animal no puede estar vacio")
             return
         }
-        if(Edad.trim() === ""){
+        if(Edad === "" || isNaN(Edad)){
             setErrores("Edad no puede estar vacio")
             return
         }
@@ -49,82 +70,83 @@ function MascotaForm({ onAdd, choices, TipoAnimal, sexo,Tamano}) {
             setErrores("Raza no puede estar vacio")
             return
         }
-        if(Sexo.trim() === ""){
+        if(selectedSexo === ""){
             setErrores("Sexo no puede estar vacio")
             return
         }
-        if(Tamaño.trim() === ""){
+        if(selectedTamaño === ""){
             setErrores("Tamaño no puede estar vacio")
             return
         }
 
+        const formData = new FormData();
+        formData.append("nombre", nombre);
+        formData.append("descripcion", descripcion);
+        formData.append("edad", Edad);
+        formData.append("raza", Raza);
+        formData.append("estado", selectedEstado);
+        formData.append("tipo_animal", selectedTipoDeAnimal);
+        formData.append("sexo", selectedSexo);
+        formData.append("tamano", selectedTamaño);
+        formData.append("imagen", Imagen);
 
-        const mascota = {
-            nombre : nombre,
-            descripcion : descripcion,
-            imagen : Imagen,
-            estado : Estado,
-            tipo_animal : TipoDeAnimal,
-            edad : Edad,
-            raza : Raza,
-            sexo : Sexo,
-            tamano : Tamaño
-        }
+        console.log(formData);
+        onAdd(formData);
 
-        onAdd(mascota)
-        setnombre("")
-        setdescripcion("")
-        setImagen("")
-        setTipoDeAnimal("")
-        setEdad("")
-        setRaza("")
-        setSexo("")
-        setTamaño("")
+
+
+        
 
     }
 
     return(
         <>
                 <h3>Formulario Mascotas</h3>
-            <form onSubmit={e => handleSubmit(e)}>
-                <label>Nombre: <input type="text" onChange={e=> setnombre(e.target.value)}/></label>
-                <label>Descripcion: <input type="text"onChange={e=> setdescripcion(e.target.value)}/></label>
-                <label>Imagen: <input type="text"onChange={e=> setImagen(e.target.value)}/></label>
+            <form onSubmit={handleSubmit} encType="multipart/form-data">
+                <label>Nombre: <input type="text" onChange={e=> setNombre(e.target.value)}/></label>
+                <label>Descripcion: <input type="text"onChange={e=> setDescripcion(e.target.value)}/></label>
+                <label>Imagen: <input type="file" onChange={e => setImagen(e.target.files[0])} /></label>
+                
+                
                 <label>Estado: 
-                    <select>
+                    <select value={selectedEstado} onChange={e => setSelectedEstado(e.target.value)} >
                         <option value={""} disabled>Sin estado</option>
                         {
-                            choices.map(e => <option key={e.value}>{e.label}</option>)
+                            Estado.map(e => <option value={e.value} key={e.value}>{e.label}</option>)
                         }
                     </select>
                 </label>
-                <label>Tipo_Animal: 
-                    <select>
+                <label>Tipo Animal: 
+                    <select value={selectedTipoDeAnimal} onChange={e => setSelectedTipoDeAnimal(e.target.value)}>
                         <option value={""} disabled>...</option>
                         {
-                            TipoAnimal.map(e => <option key={e.value}>{e.label}</option>)
+                            TipoDeAnimal.map(e => <option value={e.value} key={e.value}>{e.label}</option>)
                         }
                     </select>
                 </label>
+
+                <label>Edad: <input type="number"onChange={e=> setEdad(e.target.value)}/></label>
+                <label>Raza: <input type="text"onChange={e=> setRaza(e.target.value)}/></label>
+
                   <label>Sexo: 
-                    <select>
+                    <select value={selectedSexo} onChange={e => setSelectedSexo(e.target.value)}>
                         <option value={""} disabled>...</option>
                         {
-                            sexo.map(e => <option key={e.value}>{e.label}</option>)
+                            Sexo.map(e => <option value={e.value} key={e.value}>{e.label}</option>)
                         }
                     </select>
                 </label>
                  <label>Tamaño: 
-                    <select>
+                    <select value={selectedTamaño} onChange={e => setSelectedTamaño(e.target.value)}>
                         <option value={""} disabled>...</option>
                         {
-                            Tamano.map(e => <option key={e.value}>{e.label}</option>)
+                            Tamaño.map(e => <option value={e.value} key={e.value}>{e.label}</option>)
                         }
                     </select>
                 </label>
-                <label>Edad: <input type="text"onChange={e=> setEdad(e.target.value)}/></label>
-                <label>Raza: <input type="text"onChange={e=> setRaza(e.target.value)}/></label>
-                <button>Agregar: </button>
+
+                
+                <button type="submit">Agregar: </button>
                 <p>{errores}</p>
 
             </form>
@@ -135,4 +157,3 @@ function MascotaForm({ onAdd, choices, TipoAnimal, sexo,Tamano}) {
 }
 
 export default MascotaForm;
-//40
