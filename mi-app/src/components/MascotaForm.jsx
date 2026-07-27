@@ -95,58 +95,85 @@ function MascotaForm({ onAdd }) {
     }
 
     return(
-        <>
-                <h3>Formulario Mascotas</h3>
-            <form onSubmit={handleSubmit} encType="multipart/form-data">
-                <label>Nombre: <input type="text" onChange={e=> setNombre(e.target.value)}/></label>
-                <label>Descripcion: <input type="text"onChange={e=> setDescripcion(e.target.value)}/></label>
-                <label>Imagen: <input type="file" onChange={e => setImagen(e.target.files[0])} /></label>
+        <div className="card shadow-sm mb-4">
+            <div className="card-body">
+                <h3 className="card-title mb-3">Formulario Mascotas</h3>
+                <form onSubmit={handleSubmit} encType="multipart/form-data" className="row g-3">
+
+                <div className="col-md-4">
+                    <label className="form-label">Nombre: <input type="text" className="form-control" onChange={e=> setNombre(e.target.value)}/></label>
+                </div>
+
+                <div className="col-md-4">
+                    <label className="form-label">Descripcion: <input type="text" className="form-control" onChange={e=> setDescripcion(e.target.value)}/></label>
+                </div>
+
+                <div className="col-md-4">
+                    <label className="form-label">Imagen: <input type="file" className="form-control" onChange={e => setImagen(e.target.files[0])} /></label>
+                </div>
+                    
+                <div className="col-md-3">
+                    <label className="form-label">Estado: 
+                        <select className="form-select" value={selectedEstado} onChange={e => setSelectedEstado(e.target.value)} >
+                            <option value={""} disabled>Sin estado</option>
+                            {
+                                Estado.map(e => <option value={e.value} key={e.value}>{e.label}</option>)
+                            }
+                        </select>
+                    </label>
+                </div>    
+
+                <div className="col-md-3">
+                    <label className="form-label">Tipo Animal: 
+                        <select className="form-select" value={selectedTipoDeAnimal} onChange={e => setSelectedTipoDeAnimal(e.target.value)}>
+                            <option value={""} disabled>...</option>
+                            {
+                                TipoDeAnimal.map(e => <option value={e.value} key={e.value}>{e.label}</option>)
+                            }
+                        </select>
+                    </label>
+                </div>
+
+                <div className="col-md-3">
+                    <label className="form-label">Edad: <input type="number" className="form-control" onChange={e=> setEdad(e.target.value)}/></label>
+                </div>
                 
-                
-                <label>Estado: 
-                    <select value={selectedEstado} onChange={e => setSelectedEstado(e.target.value)} >
-                        <option value={""} disabled>Sin estado</option>
-                        {
-                            Estado.map(e => <option value={e.value} key={e.value}>{e.label}</option>)
-                        }
-                    </select>
-                </label>
-                <label>Tipo Animal: 
-                    <select value={selectedTipoDeAnimal} onChange={e => setSelectedTipoDeAnimal(e.target.value)}>
-                        <option value={""} disabled>...</option>
-                        {
-                            TipoDeAnimal.map(e => <option value={e.value} key={e.value}>{e.label}</option>)
-                        }
-                    </select>
-                </label>
+                 <div className="col-md-3">
+                    <label className="form-label">Raza: <input type="text" className="form-control" onChange={e=> setRaza(e.target.value)}/></label>
+                </div>
 
-                <label>Edad: <input type="number"onChange={e=> setEdad(e.target.value)}/></label>
-                <label>Raza: <input type="text"onChange={e=> setRaza(e.target.value)}/></label>
+                <div className="col-md-3">
+                    <label className="form-label">Sexo: 
+                        <select className="form-select" value={selectedSexo} onChange={e => setSelectedSexo(e.target.value)}>
+                            <option value={""} disabled>...</option>
+                            {
+                                Sexo.map(e => <option value={e.value} key={e.value}>{e.label}</option>)
+                            }
+                        </select>
+                    </label>
+                </div>
 
-                  <label>Sexo: 
-                    <select value={selectedSexo} onChange={e => setSelectedSexo(e.target.value)}>
-                        <option value={""} disabled>...</option>
-                        {
-                            Sexo.map(e => <option value={e.value} key={e.value}>{e.label}</option>)
-                        }
-                    </select>
-                </label>
-                 <label>Tamaño: 
-                    <select value={selectedTamaño} onChange={e => setSelectedTamaño(e.target.value)}>
-                        <option value={""} disabled>...</option>
-                        {
-                            Tamaño.map(e => <option value={e.value} key={e.value}>{e.label}</option>)
-                        }
-                    </select>
-                </label>
+                <div className="col-md-3">
+                    <label className="form-label">Tamaño: 
+                        <select className="form-select" value={selectedTamaño} onChange={e => setSelectedTamaño(e.target.value)}>
+                            <option value={""} disabled>...</option>
+                            {
+                                Tamaño.map(e => <option value={e.value} key={e.value}>{e.label}</option>)
+                            }
+                        </select>
+                    </label>
+                </div>
 
-                
-                <button type="submit">Agregar: </button>
-                <p>{errores}</p>
+                    <div className="col-12">
+                        <button type="submit" className="btn btn-primary">Agregar: </button>
+                        <p className="text-danger mt-2 mb-0">{errores}</p>
+                    </div>
 
-            </form>
+                </form>
+            </div>
+        </div>
         
-        </>
+     
 
     )
 }
