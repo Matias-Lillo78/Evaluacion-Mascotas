@@ -14,17 +14,22 @@ function MascotaPage() {
         setmascotaList(response.data);
       }
     } catch (error) {
-      console.error(error.response);
+      
     }
   };
 
   const eliminarMascota = async(id) =>{
     try {
       const response = await api.delete(`mascotas/${id}/`)
-      fetchMascotas();
-      
     } catch (error) {
-      console.error(response.error)
+      console.log(error.response.data)
+      ///Aqui intentamos hacer el alert pero la informacion que entrega error.response.data.detail esta en ingles, entonces lo traduciremos
+      const data = (error.response.data.detail)
+      if(data === "No Mascota matches the given query."){
+        alert('No existe esta mascota')
+      }
+    } finally{
+      fetchMascotas();
     }
     
   }
