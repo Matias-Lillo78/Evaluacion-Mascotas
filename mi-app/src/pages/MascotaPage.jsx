@@ -45,6 +45,9 @@ function MascotaPage() {
   const eliminarMascota = async(id) =>{
     try {
       const response = await api.delete(`mascotas/${id}/`)
+      if (response.status === 200 || response.status === 204 ){
+        alert('eliminado exitosamente:)')
+      }
     } catch (error) {
       console.log(error.response.data)
       ///Aqui intentamos hacer el alert pero la informacion que entrega error.response.data.detail esta en ingles, entonces lo traducimos

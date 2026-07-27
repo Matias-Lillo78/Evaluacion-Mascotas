@@ -89,9 +89,10 @@ function MascotaForm({ onAdd }) {
         formData.append("sexo", selectedSexo);
         formData.append("tamano", selectedTamaño);
         formData.append("imagen", Imagen);
-
         console.log(formData);
         onAdd(formData);
+        
+       
     }
 
     return(
