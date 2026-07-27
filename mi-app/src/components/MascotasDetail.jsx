@@ -14,6 +14,8 @@ function MascotasDetail() {
     console.log(id);
     const [fetchError, setFetchError] = useState(false);
     const [mascota, setMascota] = useState(null)
+    const [comentarios, setComentarios] = useState([])
+
     const fetchMascotasDetail = async () => {
         try{ 
             const response = await api.get(`mascotas/${id}/`);
@@ -24,9 +26,21 @@ function MascotasDetail() {
             setFetchError(true)
         }
     }
+    
+    const fetchComentarios = async () => {
+        try{
+            const response = await api.get("comentarios/");
+            const filtrados = response.data.filter(c => String(c.mascota) === String(id));
+            setComentarios(filtrados)
+        }catch(error){
+            console.log(error)
+        }
+    }
+
 
     useEffect(() => {
         fetchMascotasDetail();
+        fetchComentarios();
     }, [])
 
     if (fetchError) {
@@ -50,9 +64,20 @@ function MascotasDetail() {
                         <li className="list-group-item"><strong>Tipo de animal:</strong> {mascota?.tipo_animal}</li>
                         <li className="list-group-item"><strong>Sexo:</strong> {mascota?.sexo}</li>
                         <li className="list-group-item"><strong>Tamaño:</strong> {mascota?.tamano}</li>
-                        <ComentarioPage/>
                     </ul>
-                        
+
+                    <h5 className="mt-3">Comentarios</h5>
+                    {fetchError ? (
+                        <p className="text-muted">Aun no hay comentarios para esta mascota</p>
+                    ) : (
+                        <ul className="list-group">
+                            {comentarios.map(c => (
+                                <li key={c.id} className="list-group-item">
+                                    <strong>{c.autor}:</strong> {c.contenido}
+                                </li>
+                            ))}
+                        </ul>
+                    )}   
                 </div>   
         </div>
     )
