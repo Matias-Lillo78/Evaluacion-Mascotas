@@ -18,6 +18,17 @@ function MascotaPage() {
     }
   };
 
+  const eliminarMascota = async(id) =>{
+    try {
+      const response = await api.delete(`mascotas/${id}/`)
+      fetchMascotas();
+      
+    } catch (error) {
+      console.error(response.error)
+    }
+
+  }
+
   const addMascota = async (mascota) => {
     try {
       const response = await api.post("mascotas/", mascota);
@@ -44,7 +55,7 @@ function MascotaPage() {
     <article>
       <h1>Lista Mascotas</h1>
       
-      <MascotaList lista={mascotaList} onAdd={addMascota}/>
+      <MascotaList lista={mascotaList} onAdd={addMascota} onDelete={eliminarMascota}/>
     </article>
   );
 }
