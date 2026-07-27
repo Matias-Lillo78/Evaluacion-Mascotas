@@ -6,18 +6,23 @@ import MascotasDetail from "./components/MascotasDetail";
 function App() {
   return (
     <header>
-      <nav>
-        <ul>
-          <li>
-            <NavLink to="/">Mascotas</NavLink>
-          </li>
-          <li>
-            <NavLink to="/comentarios">Comentarios</NavLink>
-          </li>
-        </ul>
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div className="container">
+          <span className="navbar-brand">Mascotas</span>
+          <div className="collapse navbar-collapse">
+            <ul className="navbar-nav">
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/" end>Mascotas</NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/comentarios" >Comentarios</NavLink>
+              </li>
+            </ul>
+          </div>
+        </div>
       </nav>
 
-      <main>
+      <main className="container">
         <Routes>
           <Route path="/" element={<MascotaPage />} />
           <Route path="/comentarios" element={<ComentarioPage />} />
