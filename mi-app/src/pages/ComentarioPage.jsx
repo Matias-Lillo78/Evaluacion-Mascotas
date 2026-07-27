@@ -4,82 +4,65 @@ import api from "../services/api";
 function ComentarioPage() {
   const [comentarios, setComentarios] = useState([]);
   const [mascotas, setMascotas] = useState([]);
-  const [cargando, setCargando] = useState(true);
-  const [error, setError] = useState("");
 
   const [mascotaId, setMascotaId] = useState("");
   const [autor, setAutor] = useState("");
   const [contenido, setContenido] = useState("");
-  const [errorForm, setErrorForm] = useState("");
-  const [enviando, setEnviando] = useState(false);
 
-  function cargarComentarios() {
-    api.get("comentarios/")
-      .then((res) => {
-        setComentarios(res.data);
-      })
-      .catch(() => {
-        setError("No se pudieron cargar los comentarios.");
-      })
-      .finally(() => {
-        setCargando(false);
-      });
-  }
+  const [mensaje, setMensaje] = useState("");
+
   useEffect(() => {
-    cargarComentarios();
-    // lista de mascotas para poblar comentarios
-    api.get("mascotas/").then((res) => setMascotas(res.data));
+    obtenerComentarios();
+    obtenerMascotas();
   }, []);
 
-  function handleEliminar(id) {
-    api.delete(`comentarios/${id}/`)
-      .then(() => {
-        cargarComentarios();
+  function obtenerComentarios() {
+    api.get("comentarios/")
+      .then((respuesta) => {
+        setComentarios(respuesta.data);
+      })
+      .catch(() => {
+        alert("Error al cargar comentarios");
       });
   }
- function handleSubmit(e) {
+
+  function obtenerMascotas() {
+    api.get("mascotas/")
+      .then((respuesta) => {
+        setMascotas(respuesta.data);
+      });
+  }
+
+  function eliminarComentario(id) {
+    api.delete("comentarios/" + id + "/")
+      .then(() => {
+        obtenerComentarios();
+      });
+  }
+
+  function guardarComentario(e) {
     e.preventDefault();
 
-    if (mascotaId === "") {
-      setErrorForm("Debes elegir una mascota");
+    if (mascotaId === "" || autor === "" || contenido === "") {
+      setMensaje("Debe completar todos los campos.");
       return;
     }
-    if (autor.trim() === "") {
-      setErrorForm("Autor no puede estar vacio");
-      return;
-    }
-    if (contenido.trim() === "") {
-      setErrorForm("Contenido no puede estar vacio");
-      return;
-    }
-    setErrorForm("");
-    setEnviando(true);
 
     api.post("comentarios/", {
-      mascota: Number(mascotaId),
-      autor,
-      contenido,
+      mascota: mascotaId,
+      autor: autor,
+      contenido: contenido
     })
       .then(() => {
         setMascotaId("");
         setAutor("");
         setContenido("");
-        cargarComentarios();
+        setMensaje("");
+        obtenerComentarios();
       })
-      .catch((err) => {
-        setErrorForm(JSON.stringify(err.response?.data));
-      })
-      .finally(() => {
-        setEnviando(false);
+      .catch(() => {
+        setMensaje("Error al guardar el comentario.");
       });
-  }
-
-  if (cargando) {
-    return <p>Cargando...</p>;
-  }
-
-  if (error) {
-    return <p>{error}</p>;
   }
 
   return (
@@ -87,36 +70,65 @@ function ComentarioPage() {
       <h1>Comentarios</h1>
 
       {comentarios.length === 0 ? (
-        <p>No hay comentarios todavia.</p>
+        <p>No hay comentarios.</p>
       ) : (
         <ul>
-          {comentarios.map((c) => (
-            <li key={c.id}>
-              <strong>{c.autor}: </strong>{c.contenido}
-              <button onClick={() => handleEliminar(c.id)}>Eliminar</button>
+          {comentarios.map((comentario) => (
+            <li key={comentario.id}>
+              <strong>{comentario.autor}</strong>: {comentario.contenido}
+              <button onClick={() => eliminarComentario(comentario.id)}>
+                Eliminar
+              </button>
             </li>
           ))}
         </ul>
-          )}
+      )}
 
-    <h3>Agregar comentario</h3>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Mascota
-          <select value={mascotaId} onChange={(e) => setMascotaId(e.target.value)}>
-            <option value="">Selecciona una mascota</option>
-            {mascotas.map((m) => (
-              <option key={m.id} value={m.id}>{m.nombre}</option>
-            ))}
-          </select>
-        </label>
-        <label>Autor<input type="text" value={autor} onChange={(e) => setAutor(e.target.value)} /></label>
-        <label>Comentario<input type="text" value={contenido} onChange={(e) => setContenido(e.target.value)} /></label>
-        <button disabled={enviando}>{enviando ? "Enviando..." : "Comentar"}</button>
-        <p>{errorForm}</p>
+      <h2>Nuevo comentario</h2>
+
+      <form onSubmit={guardarComentario}>
+
+        <select
+          value={mascotaId}
+          onChange={(e) => setMascotaId(e.target.value)}
+        >
+          <option value="">Seleccione una mascota</option>
+
+          {mascotas.map((mascota) => (
+            <option key={mascota.id} value={mascota.id}>
+              {mascota.nombre}
+            </option>
+          ))}
+        </select>
+
+        <br />
+
+        <input
+          type="text"
+          placeholder="Autor"
+          value={autor}
+          onChange={(e) => setAutor(e.target.value)}
+        />
+
+        <br />
+
+        <input
+          type="text"
+          placeholder="Comentario"
+          value={contenido}
+          onChange={(e) => setContenido(e.target.value)}
+        />
+
+        <br />
+
+        <button>Guardar</button>
+
       </form>
+
+      <p>{mensaje}</p>
+
     </>
   );
-
 }
+
 export default ComentarioPage;
