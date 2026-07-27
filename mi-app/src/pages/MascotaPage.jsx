@@ -18,6 +18,8 @@ function MascotaPage() {
     }
   };
 
+  
+
   const addMascota = async (mascota) => {
     try {
       const response = await api.post("mascotas/", mascota);
