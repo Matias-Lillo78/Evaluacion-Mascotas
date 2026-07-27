@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import api from "../services/api";
 import { useEffect, useState } from "react";
+import ComentarioPage from "../pages/ComentarioPage";
 
 const badgeEstado = (estado) => {
     if (estado === "en_adopcion") return "bg-success";
@@ -49,7 +50,9 @@ function MascotasDetail() {
                         <li className="list-group-item"><strong>Tipo de animal:</strong> {mascota?.tipo_animal}</li>
                         <li className="list-group-item"><strong>Sexo:</strong> {mascota?.sexo}</li>
                         <li className="list-group-item"><strong>Tamaño:</strong> {mascota?.tamano}</li>
+                        <ComentarioPage/>
                     </ul>
+                        
                 </div>   
         </div>
     )
