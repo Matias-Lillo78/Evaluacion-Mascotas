@@ -7,7 +7,6 @@ function MascotasDetail() {
     console.log(id);
     const [fetchError, setFetchError] = useState(false);
     const [mascota, setMascota] = useState(null)
-
     const fetchMascotasDetail = async () => {
         try{ 
             const response = await api.get(`mascotas/${id}/`);
