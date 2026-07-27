@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
 
-function MascotaForm({ onAdd, choices, TipoAnimal, sexo, Tamano}) {
+function MascotaForm({ onAdd }) {
     const [Estado, setEstado] = useState([]);
     const [TipoDeAnimal, setTipoDeAnimal] = useState([]);
     const [Sexo, setSexo] = useState([]);
@@ -92,11 +92,6 @@ function MascotaForm({ onAdd, choices, TipoAnimal, sexo, Tamano}) {
 
         console.log(formData);
         onAdd(formData);
-
-
-
-        
-
     }
 
     return(
