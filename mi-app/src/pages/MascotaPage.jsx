@@ -12,7 +12,7 @@ function MascotaPage() {
       const dato = prompt('Ingrese Nombre nuevo')
 
       if(dato===null){
-        return
+
       } else if(dato.trim() === "") {
         alert('Debe ingresar un nombre')
       } 
@@ -40,7 +40,9 @@ function MascotaPage() {
         setmascotaList(response.data);
       }
     } catch (error) {
-      
+      console.log(error.response)
+    } finally {
+      fetchMascotas
     }
   };
 
