@@ -1,122 +1,163 @@
 import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 import api from "../services/api";
 
 function ComentarioPage() {
   const [comentarios, setComentarios] = useState([]);
   const [mascotas, setMascotas] = useState([]);
-  const [cargando, setCargando] = useState(true);
-  const [error, setError] = useState("");
-
   const [mascotaId, setMascotaId] = useState("");
   const [autor, setAutor] = useState("");
   const [contenido, setContenido] = useState("");
-  const [errorForm, setErrorForm] = useState("");
-  const [enviando, setEnviando] = useState(false);
+  const [mensaje, setMensaje] = useState("");
 
-  function cargarComentarios() {
-    api.get("comentarios/")
-      .then((res) => {
-        setComentarios(res.data);
-      })
-      .catch(() => {
-        setError("No se pudieron cargar los comentarios.");
-      })
-      .finally(() => {
-        setCargando(false);
-      });
-  }
   useEffect(() => {
-    cargarComentarios();
-    // lista de mascotas para poblar comentarios
-    api.get("mascotas/").then((res) => setMascotas(res.data));
+    obtenerComentarios();
+    obtenerMascotas();
   }, []);
 
-  function handleEliminar(id) {
-    api.delete(`comentarios/${id}/`)
-      .then(() => {
-        cargarComentarios();
+  useEffect(() => {
+    if (mensaje === "") return;
+
+    const timer = setTimeout(() => {
+      setMensaje("");
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [mensaje]);
+
+  function obtenerComentarios() {
+    api.get("comentarios/")
+      .then((respuesta) => {
+        setComentarios(respuesta.data);
+      })
+      .catch(() => {
+        Swal.fire("Error", "No se pudieron cargar los comentarios", "error");
       });
   }
- function handleSubmit(e) {
+
+  function obtenerMascotas() {
+    api.get("mascotas/")
+      .then((respuesta) => {
+        setMascotas(respuesta.data);
+      });
+  }
+
+  async function eliminarComentario(id) {
+    const result = await Swal.fire({
+      title: "¿Eliminar comentario?",
+      text: "Esta acción no se puede deshacer",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: "#dc3545",
+    });
+
+    if (!result.isConfirmed) return;
+
+    api.delete("comentarios/" + id + "/")
+      .then(() => {
+        obtenerComentarios();
+        Swal.fire("Eliminado", "El comentario fue eliminado", "success");
+      })
+      .catch(() => {
+        Swal.fire("Error", "No se pudo eliminar el comentario", "error");
+      });
+  }
+
+  function guardarComentario(e) {
     e.preventDefault();
-
-    if (mascotaId === "") {
-      setErrorForm("Debes elegir una mascota");
+    if (mascotaId === "" || autor === "" || contenido === "") {
+      setMensaje("Debe completar todos los campos.");
       return;
     }
-    if (autor.trim() === "") {
-      setErrorForm("Autor no puede estar vacio");
-      return;
-    }
-    if (contenido.trim() === "") {
-      setErrorForm("Contenido no puede estar vacio");
-      return;
-    }
-    setErrorForm("");
-    setEnviando(true);
-
     api.post("comentarios/", {
-      mascota: Number(mascotaId),
-      autor,
-      contenido,
+      mascota: mascotaId,
+      autor: autor,
+      contenido: contenido
     })
       .then(() => {
         setMascotaId("");
         setAutor("");
         setContenido("");
-        cargarComentarios();
+        setMensaje("");
+        obtenerComentarios();
+        Swal.fire("Guardado", "Comentario agregado correctamente", "success");
       })
-      .catch((err) => {
-        setErrorForm(JSON.stringify(err.response?.data));
-      })
-      .finally(() => {
-        setEnviando(false);
+      .catch(() => {
+        setMensaje("Error al guardar el comentario.");
       });
-  }
-
-  if (cargando) {
-    return <p>Cargando...</p>;
-  }
-
-  if (error) {
-    return <p>{error}</p>;
   }
 
   return (
     <>
-      <h1>Comentarios</h1>
+    <div className="card">
+        <div className="card-body">
+          <h2 className="card-title h5">Nuevo comentario</h2>
+          <form onSubmit={guardarComentario} className="row g-3">
+            <div className="col-md-4">
+              <select
+                className="form-select"
+                value={mascotaId}
+                onChange={(e) => setMascotaId(e.target.value)}
+              >
+                <option value="">Seleccione una mascota</option>
+                {mascotas.map((mascota) => (
+                  <option key={mascota.id} value={mascota.id}>
+                    {mascota.nombre}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="col-md-3">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Autor"
+                value={autor}
+                onChange={(e) => setAutor(e.target.value)}
+              />
+            </div>
+
+            <div className="col-md-5">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Comentario"
+                value={contenido}
+                onChange={(e) => setContenido(e.target.value)}
+              />
+            </div>
+
+            <div className="col-12">
+              <button className="btn btn-primary">Guardar</button>
+              {mensaje && <p className="text-danger mt-2 mb-0">{mensaje}</p>}
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <h1 className="mb-4">Comentarios</h1>
 
       {comentarios.length === 0 ? (
-        <p>No hay comentarios todavia.</p>
+        <p>No hay comentarios.</p>
       ) : (
-        <ul>
-          {comentarios.map((c) => (
-            <li key={c.id}>
-              <strong>{c.autor}: </strong>{c.contenido}
-              <button onClick={() => handleEliminar(c.id)}>Eliminar</button>
+        <ul className="list-group mb-4">
+          {comentarios.map((comentario) => (
+            <li key={comentario.id} className="list-group-item d-flex justify-content-between align-items-start">
+              <div>
+                <strong>{comentario.autor}</strong>: {comentario.contenido}
+              </div>
+              <button className="btn btn-sm btn-outline-danger" onClick={() => eliminarComentario(comentario.id)}>
+                Eliminar
+              </button>
             </li>
           ))}
         </ul>
-          )}
-
-    <h3>Agregar comentario</h3>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Mascota
-          <select value={mascotaId} onChange={(e) => setMascotaId(e.target.value)}>
-            <option value="">Selecciona una mascota</option>
-            {mascotas.map((m) => (
-              <option key={m.id} value={m.id}>{m.nombre}</option>
-            ))}
-          </select>
-        </label>
-        <label>Autor<input type="text" value={autor} onChange={(e) => setAutor(e.target.value)} /></label>
-        <label>Comentario<input type="text" value={contenido} onChange={(e) => setContenido(e.target.value)} /></label>
-        <button disabled={enviando}>{enviando ? "Enviando..." : "Comentar"}</button>
-        <p>{errorForm}</p>
-      </form>
+      )}
     </>
   );
-
 }
+
 export default ComentarioPage;

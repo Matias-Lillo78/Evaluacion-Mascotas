@@ -74,7 +74,8 @@ function MascotaPage() {
       const response = await api.delete(`mascotas/${id}/`)
       Swal.fire("Eliminada", "La mascota fue eliminada correctamente", "success");
       if (response.status === 200 || response.status === 204 ){
-        alert('eliminado exitosamente:)')
+        ///alert queda como comentario porque quedo sin uso despues de agregar sweetalert2
+        ///alert('eliminado exitosamente:)')
       }
     } catch (error) {
       console.log(error.response.data)
