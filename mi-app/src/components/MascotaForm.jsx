@@ -6,7 +6,6 @@ function MascotaForm({ onAdd }) {
     const [TipoDeAnimal, setTipoDeAnimal] = useState([]);
     const [Sexo, setSexo] = useState([]);
     const [Tamaño, setTamaño] = useState([]);
-
     const [nombre, setNombre] = useState("");
     const [descripcion, setDescripcion] = useState("");
     const [Edad, setEdad] = useState("");
@@ -46,6 +45,22 @@ function MascotaForm({ onAdd }) {
     return () => clearTimeout(timer);
 }, [errores]);
 
+
+
+     const limpiarFormulario = () => {
+        setNombre("");
+        setDescripcion("");
+        setEdad("");
+        setRaza("");
+        setSelectedEstado("");
+        setSelectedTipoDeAnimal("");
+        setSelectedSexo("");
+        setSelectedTamaño("");
+        setImagen(null);
+        setErrores("");
+
+       
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -99,9 +114,14 @@ function MascotaForm({ onAdd }) {
         formData.append("sexo", selectedSexo);
         formData.append("tamano", selectedTamaño);
         formData.append("imagen", Imagen);
-
         console.log(formData);
         onAdd(formData);
+        limpiarFormulario();
+        e.currentTarget.reset();
+
+
+        
+       
     }
 
     return(
