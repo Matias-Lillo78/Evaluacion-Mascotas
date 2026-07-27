@@ -6,7 +6,6 @@ function MascotaForm({ onAdd }) {
     const [TipoDeAnimal, setTipoDeAnimal] = useState([]);
     const [Sexo, setSexo] = useState([]);
     const [Tamaño, setTamaño] = useState([]);
-
     const [nombre, setNombre] = useState("");
     const [descripcion, setDescripcion] = useState("");
     const [Edad, setEdad] = useState("");
@@ -36,6 +35,22 @@ function MascotaForm({ onAdd }) {
         fetchChoices();
     }, [])
 
+
+
+     const limpiarFormulario = () => {
+        setNombre("");
+        setDescripcion("");
+        setEdad("");
+        setRaza("");
+        setSelectedEstado("");
+        setSelectedTipoDeAnimal("");
+        setSelectedSexo("");
+        setSelectedTamaño("");
+        setImagen(null);
+        setErrores("");
+
+       
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -91,6 +106,10 @@ function MascotaForm({ onAdd }) {
         formData.append("imagen", Imagen);
         console.log(formData);
         onAdd(formData);
+        limpiarFormulario();
+        e.currentTarget.reset();
+
+
         
        
     }
@@ -99,9 +118,9 @@ function MascotaForm({ onAdd }) {
         <>
                 <h3>Formulario Mascotas</h3>
             <form onSubmit={handleSubmit} encType="multipart/form-data">
-                <label>Nombre: <input type="text" onChange={e=> setNombre(e.target.value)}/></label>
-                <label>Descripcion: <input type="text"onChange={e=> setDescripcion(e.target.value)}/></label>
-                <label>Imagen: <input type="file" onChange={e => setImagen(e.target.files[0])} /></label>
+                <label>Nombre: <input type="text" value={nombre}onChange={(e)=> setNombre(e.target.value)}/></label>
+                <label>Descripcion: <input type="text" value={descripcion}onChange={(e)=> setDescripcion(e.target.value)}/></label>
+                <label>Imagen: <input type="file" onChange={(e) => setImagen(e.target.files[0])} /></label>
                 
                 
                 <label>Estado: 
@@ -121,8 +140,8 @@ function MascotaForm({ onAdd }) {
                     </select>
                 </label>
 
-                <label>Edad: <input type="number"onChange={e=> setEdad(e.target.value)}/></label>
-                <label>Raza: <input type="text"onChange={e=> setRaza(e.target.value)}/></label>
+                <label>Edad: <input type="number"value={Edad}onChange={e=> setEdad(e.target.value)}/></label>
+                <label>Raza: <input type="text"value={Raza}onChange={e=> setRaza(e.target.value)}/></label>
 
                   <label>Sexo: 
                     <select value={selectedSexo} onChange={e => setSelectedSexo(e.target.value)}>
