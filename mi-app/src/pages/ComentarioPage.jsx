@@ -91,26 +91,7 @@ function ComentarioPage() {
 
   return (
     <>
-      <h1 className="mb-4">Comentarios</h1>
-
-      {comentarios.length === 0 ? (
-        <p>No hay comentarios.</p>
-      ) : (
-        <ul className="list-group mb-4">
-          {comentarios.map((comentario) => (
-            <li key={comentario.id} className="list-group-item d-flex justify-content-between align-items-start">
-              <div>
-                <strong>{comentario.autor}</strong>: {comentario.contenido}
-              </div>
-              <button className="btn btn-sm btn-outline-danger" onClick={() => eliminarComentario(comentario.id)}>
-                Eliminar
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      <div className="card">
+    <div className="card">
         <div className="card-body">
           <h2 className="card-title h5">Nuevo comentario</h2>
           <form onSubmit={guardarComentario} className="row g-3">
@@ -156,6 +137,25 @@ function ComentarioPage() {
           </form>
         </div>
       </div>
+
+      <h1 className="mb-4">Comentarios</h1>
+
+      {comentarios.length === 0 ? (
+        <p>No hay comentarios.</p>
+      ) : (
+        <ul className="list-group mb-4">
+          {comentarios.map((comentario) => (
+            <li key={comentario.id} className="list-group-item d-flex justify-content-between align-items-start">
+              <div>
+                <strong>{comentario.autor}</strong>: {comentario.contenido}
+              </div>
+              <button className="btn btn-sm btn-outline-danger" onClick={() => eliminarComentario(comentario.id)}>
+                Eliminar
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
     </>
   );
 }
