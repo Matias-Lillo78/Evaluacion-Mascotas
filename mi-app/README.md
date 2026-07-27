@@ -17,18 +17,20 @@ If you are developing a production application, we recommend using TypeScript wi
 
 Uso de ia para el trabajo grupal
 
-(Matias)
+(Matias, Usando Claude y Copilot)
 - Se utilizo la ia para ayudar la implementacion del css utilizando las recomendaciondes del profesor como las card de las mascotas, los alerts con mejor visual, el formulario (sweetalert2)
 
 - Tambien se utilizo para llevar el comentario de mascota especifica al detalle mascota, mostrando asi la card de la mascota con sus comentarios(intentamos hacerlo sin ia pero no funcionaba)
 
-(Armando)
+- Tambien utilizo ia para mejor correccion de errores
+
+(Armando, Usando Chat GPT)
 
 - se utilizo para correcciones ortograficas de las variables para que sean iguales por ejemplo las variables response y mas abajo responde, utilizamos ia para que ambas sean la misma variable osea response(es un ejemplo) (Armando)
 
 - Tambien se utilizo ia para reiniciar el campo imagen al momento de registrar una nueva mascota, en la linea 120 de MascotasForm.jsx (no sabia como reiniciar ese campo y me ayude de la ia )
 
-(Francisco)
+(Francisco, Usando Claude y Geminis)
 
 - se utilizo ia en el uso del manejo de temporizador de imagen para que la solucion sea un poco mas rapida y sea una implementacion mas completa mostrando mensaje de espera en unos segundos 
 
