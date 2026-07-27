@@ -6,6 +6,32 @@ function MascotaPage() {
   const [mascotaList, setmascotaList] = useState([]);
 
 
+
+  const actualizarMascota = async(id)=>{
+  
+      const dato = prompt('Ingrese Nombre nuevo')
+
+      if(dato===null){
+
+      } else if(dato.trim() === "") {
+        alert('Debe ingresar un nombre')
+      } 
+      
+
+    
+    try {
+      const response = await api.patch(`mascotas/${id}/`,{nombre: dato.trim()})
+      if(response.status === 200){
+        alert('nombre actualizado')
+      }
+    } catch (error) {
+      console.log(error.response)
+    } finally{
+      fetchMascotas();
+    }
+
+  }
+
   const fetchMascotas = async () => {
     try {
       const response = await api.get("mascotas/");
@@ -14,7 +40,9 @@ function MascotaPage() {
         setmascotaList(response.data);
       }
     } catch (error) {
-      
+      console.log(error.response)
+    } finally {
+      fetchMascotas
     }
   };
 
@@ -23,7 +51,7 @@ function MascotaPage() {
       const response = await api.delete(`mascotas/${id}/`)
     } catch (error) {
       console.log(error.response.data)
-      ///Aqui intentamos hacer el alert pero la informacion que entrega error.response.data.detail esta en ingles, entonces lo traduciremos
+      ///Aqui intentamos hacer el alert pero la informacion que entrega error.response.data.detail esta en ingles, entonces lo traducimos
       const data = (error.response.data.detail)
       if(data === "No Mascota matches the given query."){
         alert('No existe esta mascota')
@@ -49,9 +77,6 @@ function MascotaPage() {
     }
   };
 
-
-
-
   useEffect(() => {
     fetchMascotas();
   }, []);
@@ -60,10 +85,9 @@ function MascotaPage() {
     <article>
       <h1>Lista Mascotas</h1>
       
-      <MascotaList lista={mascotaList} onAdd={addMascota} onDelete={eliminarMascota}/>
+      <MascotaList lista={mascotaList} onAdd={addMascota} onDelete={eliminarMascota} onUpdate={actualizarMascota}/>
     </article>
   );
+
 }
-
 export default MascotaPage;
-
