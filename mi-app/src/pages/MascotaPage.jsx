@@ -9,22 +9,18 @@ function MascotaPage() {
 
   const actualizarMascota = async(id)=>{
   
-      const dato = prompt('Ingrese Nombre nuevo')
-
-      if(dato===null){
-
-      } else if(dato.trim() === "") {
-        alert('Debe ingresar un nombre')
-      } 
-      
-
-    
+    const dato = prompt('Ingrese Nombre nuevo')
     try {
       const response = await api.patch(`mascotas/${id}/`,{nombre: dato.trim()})
       if(response.status === 200){
         alert('nombre actualizado')
       }
     } catch (error) {
+      if (error.response?.status === 400){
+        alert("Error de validacion");
+      }else {
+        alert("Cancelando.........")
+      }
       console.log(error.response)
     } finally{
       fetchMascotas();
