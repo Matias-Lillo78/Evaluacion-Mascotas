@@ -36,6 +36,16 @@ function MascotaForm({ onAdd }) {
         fetchChoices();
     }, [])
 
+    useEffect(() => {
+    if (errores === "") return;
+
+    const timer = setTimeout(() => {
+        setErrores("");
+    }, 3000);
+
+    return () => clearTimeout(timer);
+}, [errores]);
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
